@@ -27,7 +27,7 @@ const ProductList = () => {
 
     const getProducts = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/product/get`);
+            const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/get`);
             if (!response.ok) {
                 throw new Error("Failed to fetch products");
             }
@@ -42,7 +42,7 @@ const ProductList = () => {
         const token = JSON.parse(localStorage.getItem('tk'));
 
         try {
-            const response = await fetch(`http://localhost:5000/product/${id}`, {
+            const response = await fetch(`https://ecommerce-1mc7.onrender.comz/product/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
