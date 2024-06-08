@@ -22,7 +22,7 @@ function Orderlist() {
     const getProducts = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`http://localhost:5000/order/get`, {
+            const response = await fetch(`https://ecommerce-1mc7.onrender.com/order/get`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
