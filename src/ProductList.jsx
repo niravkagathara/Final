@@ -80,7 +80,7 @@ const ProductList = () => {
                                 <th>Price</th>
                                 <th>Descripton</th>
                                 <th>Companyname</th>
-                                <th>Edit</th>
+{/*                                 <th>Edit</th> */}
                                 <th>Remove</th>
 
                             </tr>
@@ -89,14 +89,14 @@ const ProductList = () => {
                         <tbody>
                             {products.map((product, index) => (
                                 <>
-                                    <tr key={product._id}>
+                                    <tr  onClick={showedit}  key={product._id}>
                                         <td >{index + 1}</td>
                                         <td style={{ height: '15rem', width: '20rem' }}><img src={`https://ecommerce-1mc7.onrender.com/images/${product.imageA}`} alt={product.name} style={{ width: '100px' }} /></td>
                                         <td style={{ height: '6rem', width: '18rem' }}>{product.name}</td>
                                         <td style={{ height: '6rem', width: '15rem' }}>${product.price}</td>
                                         <td style={{ height: '10rem', width: '50rem' }}>{product.category}</td>
                                         <td style={{ height: '6rem', width: '10rem' }}>{product.companyname}</td>
-                                        <td  onClick={showedit} ><a className="icon"><i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} ></i></a></td>
+{/*                                         <td  onClick={showedit} ><a className="icon"><i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} ></i></a></td> */}
                                         <td ><a className="icon"><i class='bx bxs-trash-alt' style={{ color: '#df0808' }} onClick={handleShow}></i></a></td>
                                     </tr>
                                     <Modal show={show} onHide={handleClose}>
