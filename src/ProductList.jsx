@@ -42,7 +42,7 @@ const ProductList = () => {
         const token = JSON.parse(localStorage.getItem('tk'));
 
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.comz/product/${id}`, {
+            const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,

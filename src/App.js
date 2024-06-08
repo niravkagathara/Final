@@ -1,4 +1,5 @@
 import { BrowserRouter,Navigate, Route, Routes } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './App.css';
 import Contect from './Contect';
@@ -22,6 +23,7 @@ import Orderlist from './orderlist';
 import { User1 } from './Userlist';
 import { Userupdate } from './UserUpdate';
 import { AddUser } from './adduser';
+import Confi from './confirm_ord';
 
 
 function App() {
@@ -44,8 +46,8 @@ function App() {
       {/* <Route path='/contact' element={<Contect />} /> */}
       <Route path='/term' element={<Term />} />
       <Route path='/detail/:id' element={<ProductDetail />} />
-      {/* <Route path='/buynow' element={<Confi />} />
-      <Route path='/payment' element={<Orderpaymant />} /> */}
+       <Route path='/buynow' element={<Confi />} />
+      {/* <Route path='/payment' element={<Orderpaymant />} />  */}
 
       <Route path='/login'  element={<Login/>}/>
       <Route path='/signup'  element={<Signup/>}/>

@@ -1,59 +1,45 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
+import * as yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
-import * as formik from 'formik';
-import * as yup from 'yup';
 
 const AddProduct = () => {
-    const [file, setFile] = useState();
-    const { Formik } = formik;
+    const [file, setFile] = useState(null);
+    const navigate = useNavigate();
+
     const schema = yup.object().shape({
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        username: yup.string().required(),
-        city: yup.string().required(),
-        state: yup.string().required(),
-        zip: yup.string().required(),
-        file: yup.mixed().required(),
-        terms: yup.bool().required().oneOf([true], 'terms must be accepted'),
+        name: yup.string().required('Product name is required'),
+        price: yup.number().required('Price is required').positive('Price must be positive'),
+        category: yup.string().required('Description is required'),
+        companyname: yup.string().required('Company name is required'),
+        file: yup.mixed().required('File is required'),
     });
 
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [category, setCategory] = useState('');
-    const [companyname, setCompany] = React.useState('');
+    const addProduct = async (values) => {
+        const { name, price, category, companyname, file } = values;
 
-    const [error, setError] = React.useState(false);
-    const nav = useNavigate();
-
-
-    const addProduct = async () => {
-        let responseData;
-        let imageA;
         const formData = new FormData();
         formData.append('file', file);
 
+        let responseData;
         await fetch(`https://ecommerce-1mc7.onrender.com/upload`, {
             method: 'POST',
-            headers: {
-                Accept: 'application/json',
-            },
-            body: formData
+            headers: { Accept: 'application/json' },
+            body: formData,
         })
-            .then((res) => res.json()).then((data) => { responseData = data })
-        if (!name || !price || !companyname || !category) {
-            setError(true);
-            return false
-        }
+            .then(res => res.json())
+            .then(data => { responseData = data });
+
         const token = JSON.parse(localStorage.getItem('tk'));
         const userId = JSON.parse(localStorage.getItem('user')).user._id;
-        imageA = responseData.image_url
-        let result = await fetch(`https://ecommerce-1mc7.onrender.com/product/add-product`, {
+        const imageA = responseData.image_url;
+
+        const result = await fetch(`https://ecommerce-1mc7.onrender.com/product/add-product`, {
             method: "POST",
             body: JSON.stringify({ name, price, category, companyname, userId, imageA }),
             headers: {
@@ -61,125 +47,73 @@ const AddProduct = () => {
                 "Content-Type": "application/json",
             },
         });
-        result = await result.json();
-        if (result) {
-            nav('/product')
+        const resultData = await result.json();
+        if (resultData) {
+            navigate('/product');
         }
-        console.warn(result)
     }
+
     return (
-
-
-        <>
-
-            <div className="product">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td> <h1 className=" q">Add Product</h1></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <Formik
-                    validationSchema={schema}
-                    onSubmit={console.log}
-                    initialValues={{
-                        firstName: 'Mark',
-                        lastName: 'Otto',
-                        username: '',
-                        city: '',
-                        state: '',
-                        zip: '',
-                        file: null,
-                        terms: false,
-                    }}
-                >
-                    {({ handleSubmit }) => (
-                           
-                        <Form className="center" onSubmit={handleSubmit}>
-                                <Form.Group
-                                    as={Col}
-                                    md="4"
-                                    controlId="validationFormik101"
-                                    className="position-relative"
-                                >
-                                    <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="firstName"
-                                        placeholder="Enter Product Name"
-                                        onChange={(e) => { setName(e.target.value) }} value={name}
-                                    />
-                                    <Form.Control.Feedback ></Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group
-                                    as={Col}
-                                    md="4"
-                                    controlId="validationFormik102"
-                                    className="position-relative"
-                                >
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        type="number" placeholder="Enter Prduct Price"
-                                        onChange={(e) => { setPrice(e.target.value) }} value={price}
-                                        name="lastName"
-                                    />
-
-                                    <Form.Control.Feedback ></Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md="4" controlId="validationFormikUsername2">
-                                    <Form.Label>Descripton</Form.Label>
-                                    <InputGroup hasValidation>
-                                        <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="Enter Product descripton" className="inputBox"
-                                            onChange={(e) => { setCategory(e.target.value) }} value={category}
-                                            aria-describedby="inputGroupPrepend"
-                                            name="username"
-
-                                        />
-
-                                    </InputGroup>
-                                </Form.Group>
-                            <Form.Group
-                                as={Col}
-                                md="6"
-                                controlId="validationFormik103"
-                                className="position-relative"
-                            >
-                                <Form.Label>company</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter Product Company"
-                                    onChange={(e) => { setCompany(e.target.value) }} value={companyname}
-                                    name="city"
-
-                                />
-
-
+        <div className="container mt-5">
+            <h1 className="text-center mb-4">Add Product</h1>
+            <Formik
+                validationSchema={schema}
+                initialValues={{
+                    name: '',
+                    price: '',
+                    category: '',
+                    companyname: '',
+                    file: null,
+                }}
+                onSubmit={addProduct}
+            >
+                {({ setFieldValue, isSubmitting }) => (
+                    <FormikForm>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="6" controlId="validationFormik101">
+                                <Form.Label>Product Name</Form.Label>
+                                <Field name="name" type="text" placeholder="Enter Product Name" className="form-control" />
+                                <ErrorMessage name="name" component="div" className="text-danger" />
                             </Form.Group>
-
-                            <Form.Group className="position-relative mb-3">
+                            <Form.Group as={Col} md="6" controlId="validationFormik102">
+                                <Form.Label>Price</Form.Label>
+                                <Field name="price" type="number" placeholder="Enter Product Price" className="form-control" />
+                                <ErrorMessage name="price" component="div" className="text-danger" />
+                            </Form.Group>
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="6" controlId="validationFormik103">
+                                <Form.Label>Description</Form.Label>
+                                <Field name="category" type="text" placeholder="Enter Product Description" className="form-control" />
+                                <ErrorMessage name="category" component="div" className="text-danger" />
+                            </Form.Group>
+                            <Form.Group as={Col} md="6" controlId="validationFormik104">
+                                <Form.Label>Company</Form.Label>
+                                <Field name="companyname" type="text" placeholder="Enter Company Name" className="form-control" />
+                                <ErrorMessage name="companyname" component="div" className="text-danger" />
+                            </Form.Group>
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} controlId="validationFormik105">
                                 <Form.Label>File</Form.Label>
-                                <Form.Control
-                                    type="file"
-                                    required
-                                    onChange={(e) => {
-                                        setFile(e.target.files[0]);
-                                    }}
+                                <input
                                     name="file"
+                                    type="file"
+                                    onChange={(event) => {
+                                        setFieldValue('file', event.currentTarget.files[0]);
+                                        setFile(event.currentTarget.files[0]);
+                                    }}
+                                    className="form-control"
                                 />
-
+                                <ErrorMessage name="file" component="div" className="text-danger" />
                             </Form.Group>
-                            <Button type="submit" onClick={addProduct}>Add Product </Button>
-                        </Form>
-                       
-                    )}
-                </Formik>
-            </div>
-        </>
-    )
+                        </Row>
+                        <Button type="submit" disabled={isSubmitting} className="mt-3">Add Product</Button>
+                    </FormikForm>
+                )}
+            </Formik>
+        </div>
+    );
 };
 
 export { AddProduct };

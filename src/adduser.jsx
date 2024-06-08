@@ -1,21 +1,27 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
 const AddUser = () => {
-    const [file, setFile] = useState();
-
+    const [file, setFile] = useState(null);
     const [name, setName] = useState('');
-    const [email, setemail] = useState('');
-    const [role, setrole] = useState('');
-
-    const [password, setpassword] = useState('');
-    const [error, setError] = React.useState(false);
+    const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const nav = useNavigate();
 
-
-    const addProduct = async () => {
+    const addUser = async () => {
         let responseData;
         let photo;
+
+        if (!name || !email || !password || !role) {
+            setError(true);
+            setErrorMessage('Please fill in all fields.');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
 
@@ -26,13 +32,10 @@ const AddUser = () => {
             },
             body: formData
         })
-            .then((res) => res.json()).then((data) => { responseData = data })
+        .then((res) => res.json())
+        .then((data) => { responseData = data });
 
-        if (!name || !email || !password || !role) {
-            setError(true);
-            return false
-        }
-        photo = responseData.image_url
+        photo = responseData.image_url;
 
         const token = JSON.parse(localStorage.getItem('tk'));
         let result = await fetch(`https://ecommerce-1mc7.onrender.com/add-user`, {
@@ -43,43 +46,94 @@ const AddUser = () => {
                 "Content-Type": "application/json"
             }
         });
+
         result = await result.json();
         if (result) {
-            nav('/user')
+            nav('/user');
         }
-        console.warn(result)
-    }
+        console.warn(result);
+    };
+
     return (
-        <div className="product">
-            <h1>add user</h1>
-            <input type="text" placeholder="Enter user Name" className="inputBox"
-                onChange={(e) => { setName(e.target.value) }} value={name}
-            />
-            {error && !name && <span className="invalid-input">Enter fill</span>}
+        <Container>
+            <h1>Add User</h1>
+            {error && <Alert variant="danger">{errorMessage}</Alert>}
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>User Name</Form.Label>
+                    <Form.Control 
+                        type="text" 
+                        placeholder="Enter user name" 
+                        onChange={(e) => setName(e.target.value)} 
+                        value={name} 
+                        isInvalid={error && !name}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Enter a valid name.
+                    </Form.Control.Feedback>
+                </Form.Group>
 
-            <input type="text" placeholder="Enter user email" className="inputBox"
-                onChange={(e) => { setemail(e.target.value) }} value={email}
-            />
-            {error && !email && <span className="invalid-input">Enter valid formate</span>}
+                <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control 
+                        type="email" 
+                        placeholder="Enter user email" 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        value={email} 
+                        isInvalid={error && !email}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Enter a valid email.
+                    </Form.Control.Feedback>
+                </Form.Group>
 
-            <input type="text" placeholder="Enter password set" className="inputBox"
-                onChange={(e) => { setpassword(e.target.value) }} value={password}
-            />
-            {error && !password && <span className="invalid-input">Enter valid formate</span>}
+                <Form.Group className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control 
+                        type="password" 
+                        placeholder="Enter password" 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        value={password} 
+                        isInvalid={error && !password}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Enter a valid password.
+                    </Form.Control.Feedback>
+                </Form.Group>
 
-            <input type="radio" placeholder="Enter role" name='role' className=""
-                onChange={(e) => { setrole(e.target.value) }} value='user' />user
-                <br/>
-           <input type="radio" placeholder="Enter role" name='role' className=""
-                onChange={(e) => { setrole(e.target.value) }} value='admin' />admin
-            {error && !password && <span className="invalid-input">Enter admin or user</span>}
-            <br></br>
-            <input type="file" onChange={(e) => {
-                setFile(e.target.files[0]);
-            }} />
-            <button type="button" className="appButton" onClick={addProduct}>Add user </button>
-        </div>
-    )
+                <Form.Group className="mb-3">
+                    <Form.Label>Role</Form.Label><br />
+                    <Form.Check 
+                        type="radio" 
+                        label="User" 
+                        name="role" 
+                        onChange={(e) => setRole(e.target.value)} 
+                        value="user" 
+                        inline 
+                    />
+                    <Form.Check 
+                        type="radio" 
+                        label="Admin" 
+                        name="role" 
+                        onChange={(e) => setRole(e.target.value)} 
+                        value="admin" 
+                        inline 
+                    />
+                    {error && !role && <div className="text-danger">Select a role.</div>}
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Profile Picture</Form.Label>
+                    <Form.Control 
+                        type="file" 
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
+                </Form.Group>
+
+                <Button variant="primary" onClick={addUser}>Add User</Button>
+            </Form>
+        </Container>
+    );
 };
 
 export { AddUser };
