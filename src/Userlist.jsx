@@ -96,24 +96,24 @@ const User1 = () => {
                             <th>Role</th>
                             <th>Password</th>
                             <th>Email</th>
-                            <th>Edit</th>
+                            {/* <th>Edit</th> */}
                             <th>Remove</th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((user, index) => (
                             <tr key={user._id}>
-                                <td>{index + 1}</td>
-                                <td style={{ height: '6rem', width: '20rem' }}>
+                                <td onClick={() => handleShowEditModal(user)} >{index + 1}</td>
+                                <td onClick={() => handleShowEditModal(user)} style={{ height: '6rem', width: '20rem' }}>
                                     <img src={`https://ecommerce-1mc7.onrender.com/images/${user.photo}`} alt={user.name} style={{ width: '100px' }} />
                                 </td>
-                                <td style={{ width: '15rem' }}>{user.name}</td>
-                                <td style={{ width: '9rem' }}>{user.role}</td>
-                                <td style={{ width: '15rem' }}>{user.password}</td>
-                                <td style={{ width: '30rem' }}>{user.email}</td>
-                                <td>
+                                <td onClick={() => handleShowEditModal(user)} style={{ width: '15rem' }}>{user.name}</td>
+                                <td onClick={() => handleShowEditModal(user)} style={{ width: '9rem' }}>{user.role}</td>
+                                <td onClick={() => handleShowEditModal(user)} style={{ width: '15rem' }}>{user.password}</td>
+                                <td onClick={() => handleShowEditModal(user)} style={{ width: '30rem' }}>{user.email}</td>
+                                {/* <td>
                                     <i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} onClick={() => handleShowEditModal(user)}></i>
-                                </td>
+                                </td> */}
                                 <td>
                                     <i className='bx bxs-trash-alt' style={{ color: '#df0808' }} onClick={() => handleShowDeleteModal(user)}></i>
                                 </td>
