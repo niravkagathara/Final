@@ -96,7 +96,7 @@ const ProductList = () => {
                                         <td style={{ height: '6rem', width: '15rem' }}>${product.price}</td>
                                         <td style={{ height: '10rem', width: '50rem' }}>{product.category}</td>
                                         <td style={{ height: '6rem', width: '10rem' }}>{product.companyname}</td>
-                                        <td ><a className="icon"><i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} onClick={showedit} ></i></a></td>
+                                        <td  onClick={showedit} ><a className="icon"><i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} ></i></a></td>
                                         <td ><a className="icon"><i class='bx bxs-trash-alt' style={{ color: '#df0808' }} onClick={handleShow}></i></a></td>
                                     </tr>
                                     <Modal show={show} onHide={handleClose}>
