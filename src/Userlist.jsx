@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Table from 'react-bootstrap/Table';
 
-function Orderlist() {
-    const [products, setProducts] = useState([]);
+const User1 = () => {
+    const [users, setUsers] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
 
-    const handleDeleteClose = () => setShowDeleteModal(false);
-    const handleShowDeleteModal = (product) => {
-        setSelectedProduct(product);
+    const handleCloseDeleteModal = () => setShowDeleteModal(false);
+    const handleShowDeleteModal = (user) => {
+        setSelectedUser(user);
         setShowDeleteModal(true);
     };
 
+    const handleCloseEditModal = () => setShowEditModal(false);
+    const handleShowEditModal = (user) => {
+        setSelectedUser(user);
+        setShowEditModal(true);
+    };
+
+    const handleDelete = async () => {
+        setShowDeleteModal(false);
+        deleteUser(selectedUser._id);
+    };
+
     useEffect(() => {
-        getProducts();
+        getUsers();
     }, []);
 
-    const getProducts = async () => {
+    const getUsers = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`http://localhost:5000/order/get`, {
+            const response = await fetch(`http://localhost:5000/`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -30,16 +42,16 @@ function Orderlist() {
                 },
             });
             const result = await response.json();
-            setProducts(result);
+            setUsers(result);
         } catch (error) {
-            console.error("Error fetching orders:", error);
+            console.error("Error fetching users:", error);
         }
     };
 
-    const deleteProduct = async (id) => {
+    const deleteUser = async (id) => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`http://localhost:5000/order/${id}`, {
+            const response = await fetch(`http://localhost:5000/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -48,78 +60,96 @@ function Orderlist() {
             });
             const result = await response.json();
             if (result) {
-                getProducts();
-                setShowDeleteModal(false);
+                getUsers();
             } else {
-                alert('Error deleting order');
+                alert('Error deleting user');
             }
         } catch (error) {
-            console.error("Error deleting order:", error);
+            console.error("Error deleting user:", error);
         }
     };
 
     return (
-        <div>
-            <div className="Product-list">
-                <div className="container">
-                    <br />
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><h1 className="text-sm-end q">Order List</h1></td>
-                                <td><Link to="/addorder" className="btn btn-primary btn-lg active mb-3" role="button" aria-pressed="true">Add Order</Link></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />
+        <div className="Product-list">
+            <div className="container">
+                <br />
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h1 className="text-sm-end q">User List</h1>
+                            </td>
+                            <td>
+                                <Link to="/adduser" className="btn btn-primary btn-lg active mb-3" role="button" aria-pressed="true">Add user</Link>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
 
-                    <Table responsive className="table">
-                        <thead className="table-dark">
-                            <tr>
-                                <th>Index</th>
-                                <th>Customer Name</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Total Amount</th>
-                                <th>User ID</th>
-                                <th>Remove</th>
+                <Table responsive className="table">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Index</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Password</th>
+                            <th>Email</th>
+                            <th>Edit</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user, index) => (
+                            <tr key={user._id}>
+                                <td>{index + 1}</td>
+                                <td style={{ height: '6rem', width: '20rem' }}>
+                                    <img src={`http://localhost:5000/images/${user.photo}`} alt={user.name} style={{ width: '100px' }} />
+                                </td>
+                                <td style={{ width: '15rem' }}>{user.name}</td>
+                                <td style={{ width: '9rem' }}>{user.role}</td>
+                                <td style={{ width: '15rem' }}>{user.password}</td>
+                                <td style={{ width: '30rem' }}>{user.email}</td>
+                                <td>
+                                    <i className='bx bxs-edit-alt' style={{ color: '#2140fb' }} onClick={() => handleShowEditModal(user)}></i>
+                                </td>
+                                <td>
+                                    <i className='bx bxs-trash-alt' style={{ color: '#df0808' }} onClick={() => handleShowDeleteModal(user)}></i>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {products.map((product, index) => (
-                                <tr key={product._id}>
-                                    <td>{index + 1}</td>
-                                    <td style={{ height: '6rem', width: '10rem' }}>{product.customerName}</td>
-                                    <td style={{ height: '6rem', width: '22rem' }}>{product.address}</td>
-                                    <td style={{ height: '6rem', width: '18rem' }}>{product.email}</td>
-                                    <td style={{ height: '6rem', width: '12rem' }}>{product.phoneNumber}</td>
-                                    <td style={{ height: '6rem', width: '10rem' }}>${product.totalAmount}</td>
-                                    <td>{product.userId}</td>
-                                    <td >
-                                        <i  className='bx bxs-trash-alt' style={{ color: '#df0808' }} onClick={() => handleShowDeleteModal(product)}></i>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                        ))}
+                    </tbody>
+                </Table>
 
-                    {selectedProduct && (
-                        <Modal show={showDeleteModal} onHide={handleDeleteClose}>
+                {selectedUser && (
+                    <>
+                        <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
                             <Modal.Header closeButton>
                                 <Modal.Title>Confirm Delete Record</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>Are you sure you want to delete this order?</Modal.Body>
+                            <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={handleDeleteClose}>Cancel</Button>
-                                <Button variant="danger" onClick={() => deleteProduct(selectedProduct._id)}>Confirm</Button>
+                                <Button variant="secondary" onClick={handleCloseDeleteModal}>Cancel</Button>
+                                <Button variant="danger" onClick={handleDelete}>Confirm</Button>
                             </Modal.Footer>
                         </Modal>
-                    )}
-                </div>
+
+                        <Modal show={showEditModal} onHide={handleCloseEditModal}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Edit User</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure you want to edit this user?</Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
+                                <Link to={`/userupdate/${selectedUser._id}`} onClick={handleCloseEditModal} className="btn btn-primary">Edit</Link>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
+                )}
             </div>
         </div>
     );
-}
+};
 
-export default Orderlist;
+export { User1 };
