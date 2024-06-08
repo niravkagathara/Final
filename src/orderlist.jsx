@@ -39,7 +39,7 @@ function Orderlist() {
     const deleteProduct = async (id) => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`http://localhost:5000/order/${id}`, {
+            const response = await fetch(`https://ecommerce-1mc7.onrender.com/order/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
