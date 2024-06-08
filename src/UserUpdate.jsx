@@ -1,16 +1,20 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-const Userupdate = () => {
-    const [file, setFile] = useState();
+import { Form, Button, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+const Userupdate = () => {
+    const [file, setFile] = useState(null);
     const [name, setName] = useState('');
-    const [email, setemail] = useState('');
-    const [photo, setphoto] = useState('')
-    const [role, setrole] = useState('');
-    const [password, setpassword] = React.useState('');
-    const par = useParams();
-    const nav = useNavigate();
+    const [email, setEmail] = useState('');
+    const [photo, setPhoto] = useState('');
+    const [role, setRole] = useState('');
+    const [password, setPassword] = useState('');
+    const [validated, setValidated] = useState(false);
+    const [error, setError] = useState(null);
+
+    const { id, imageA } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getProductDetails();
@@ -18,87 +22,156 @@ const Userupdate = () => {
 
     const getProductDetails = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
+        try {
+            let result = await fetch(`https://ecommerce-1mc7.onrender.com/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            result = await result.json();
+            setName(result.name);
+            setEmail(result.email);
+            setPassword(result.password);
+            setRole(result.role);
+            setPhoto(result.photo);
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    };
 
-        let result = await fetch(`https://ecommerce-1mc7.onrender.com/${par.id}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            }
-        });
-        result = await result.json();
-        setName(result.name)
-        setemail(result.email)
-        setpassword(result.password)
-        setrole(result.role)
-        setphoto(result.photo)
-
-    }
-    const UpdateProduct = async () => {
-        let responseData;
-        let photo;
-        const formData = new FormData();
-        formData.append('file', file);
-        await fetch(`https://ecommerce-1mc7.onrender.com/upload/${par.imageA}`, {
-            method: 'put',
-            headers: {
-                Accept: 'application/json',
-            },
-            body: formData
-        })
-            .then((res) => res.json()).then((data) => { responseData = data })
-
-        const token = JSON.parse(localStorage.getItem('tk'));
-        photo = responseData.image_url
-
-        let result = await fetch(`https://ecommerce-1mc7.onrender.com/${par.id}`, {
-            method: 'put',
-            body: JSON.stringify({ name, email, password, role, photo }),
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-
-            }
-        });
-        result = await result.json();
-        if (result) {
-            nav('/user')
+    const updateProduct = async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+            setValidated(true);
+            return;
         }
 
-    }
+        setValidated(true);
+        let responseData;
+        let photoUrl;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const uploadResponse = await fetch(`https://ecommerce-1mc7.onrender.com/upload/${imageA}`, {
+                method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                },
+                body: formData
+            });
+            responseData = await uploadResponse.json();
+            photoUrl = responseData.image_url;
+        } catch (error) {
+            setError('Error uploading image');
+            return;
+        }
+
+        const token = JSON.parse(localStorage.getItem('tk'));
+        try {
+            let result = await fetch(`https://ecommerce-1mc7.onrender.com/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ name, email, password, role, photo: photoUrl }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            result = await result.json();
+            if (result) {
+                navigate('/user');
+            }
+        } catch (error) {
+            setError('Error updating user');
+        }
+    };
+
     return (
-        <div className="product">
-            <h1>Update user</h1>
-            name
-            <input type="text" placeholder="Enter Product Name" className="inputBox"
-                onChange={(e) => { setName(e.target.value) }} value={name}
-            />
-            email
-            <input type="text" placeholder="Enter Prduct email" className="inputBox"
-                onChange={(e) => { setemail(e.target.value) }} value={email}
-            />
-            password
-            <input type="text" placeholder="Enter Product password" className="inputBox"
-                onChange={(e) => { setpassword(e.target.value) }} value={password}
-            />
+        <div className="container">
+            <h1>Update User</h1>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form noValidate validated={validated} onSubmit={updateProduct}>
+                <Form.Group controlId="formName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter user name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                    <Form.Control.Feedback type="invalid">Please provide a name.</Form.Control.Feedback>
+                </Form.Group>
 
-            <input type="radio" placeholder="Enter role" name='role' className=""
-                onChange={(e) => { setrole(e.target.value) }} value='user' />user
-            <br />
-            <input type="radio" placeholder="Enter role" name='role' className=""
-                onChange={(e) => { setrole(e.target.value) }} value='admin' />admin
-            <br></br>
+                <Form.Group controlId="formEmail">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        type="email"
+                        placeholder="Enter user email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <Form.Control.Feedback type="invalid">Please provide a valid email.</Form.Control.Feedback>
+                </Form.Group>
 
+                <Form.Group controlId="formPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                        type="password"
+                        placeholder="Enter user password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <Form.Control.Feedback type="invalid">Please provide a password.</Form.Control.Feedback>
+                </Form.Group>
 
-            image path<br />
-            <input type="file" onChange={(e) => { setFile(e.target.files[0]); }} />
-            <img src={`https://ecommerce-1mc7.onrender.com/images/${photo}`} style={{ width: '100px' }} />
-            <br />
+                <Form.Group>
+                    <Form.Label>Role</Form.Label>
+                    <div>
+                        <Form.Check
+                            inline
+                            label="User"
+                            name="role"
+                            type="radio"
+                            value="user"
+                            checked={role === 'user'}
+                            onChange={(e) => setRole(e.target.value)}
+                            required
+                        />
+                        <Form.Check
+                            inline
+                            label="Admin"
+                            name="role"
+                            type="radio"
+                            value="admin"
+                            checked={role === 'admin'}
+                            onChange={(e) => setRole(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <Form.Control.Feedback type="invalid">Please select a role.</Form.Control.Feedback>
+                </Form.Group>
 
+                <Form.Group controlId="formFile">
+                    <Form.Label>Profile Image</Form.Label>
+                    <Form.Control
+                        type="file"
+                        onChange={(e) => setFile(e.target.files[0])}
+                        required
+                    />
+                    <Form.Control.Feedback type="invalid">Please upload an image.</Form.Control.Feedback>
+                    {photo && <img src={`https://ecommerce-1mc7.onrender.com/images/${photo}`} alt="Profile" style={{ width: '100px', marginTop: '10px' }} />}
+                </Form.Group>
 
-
-            <button type="button" className="appButton" onClick={UpdateProduct}>Update user </button>
+                <Button variant="primary" type="submit" className="mt-3">Update User</Button>
+            </Form>
         </div>
-    )
+    );
 };
 
 export { Userupdate };
