@@ -25,7 +25,7 @@ const AddUser = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        await fetch(`https://ecommerce-1mc7.onrender.com/upload`, {
+        await fetch(`https://e-commerce-api-peach.vercel.app/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -38,7 +38,7 @@ const AddUser = () => {
         photo = responseData.image_url;
 
         const token = JSON.parse(localStorage.getItem('tk'));
-        let result = await fetch(`https://ecommerce-1mc7.onrender.com/add-user`, {
+        let result = await fetch(`https://e-commerce-api-peach.vercel.app/add-user`, {
             method: "POST",
             body: JSON.stringify({ name, email, password, role, photo }),
             headers: {

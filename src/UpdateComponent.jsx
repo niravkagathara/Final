@@ -20,7 +20,7 @@
 //         const token = JSON.parse(localStorage.getItem('tk'));
 
 //         try {
-//             const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
+//             const response = await fetch(`https://e-commerce-api-peach.vercel.app/product/${id}`, {
 //                 headers: {
 //                     "Content-Type": "application/json",
 //                     Authorization: `Bearer ${token}`
@@ -42,7 +42,7 @@
 //             const formData = new FormData();
 //             formData.append('file', file);
 
-//             const uploadResponse = await fetch(`https://ecommerce-1mc7.onrender.com/upload/${imageA}`, {
+//             const uploadResponse = await fetch(`https://e-commerce-api-peach.vercel.app/upload/${imageA}`, {
 //                 method: 'PUT',
 //                 headers: {
 //                     Accept: 'application/json',
@@ -54,7 +54,7 @@
 
 //             const token = JSON.parse(localStorage.getItem('tk'));
 
-//             const updateResponse = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
+//             const updateResponse = await fetch(`https://e-commerce-api-peach.vercel.app/product/${id}`, {
 //                 method: 'PUT',
 //                 body: JSON.stringify({ name, price, category, companyname, imageA: newImageA }),
 //                 headers: {
@@ -130,7 +130,7 @@
 //                         id="file"
 //                         onChange={(e) => setFile(e.target.files[0])}
 //                     />
-//                     {imageA && <img src={`https://ecommerce-1mc7.onrender.com/images/${imageA}`} alt="Product" className="img-thumbnail mt-2" style={{ width: '100px' }} />}
+//                     {imageA && <img src={`https://e-commerce-api-peach.vercel.app/images/${imageA}`} alt="Product" className="img-thumbnail mt-2" style={{ width: '100px' }} />}
 //                 </div>
 //                 <button type="button" className="btn btn-primary mt-3" onClick={handleUpdateProduct}>Update Product</button>
 //             </form>
@@ -163,7 +163,7 @@ const UpdateProduct = () => {
         const token = JSON.parse(localStorage.getItem('tk'));
 
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/product/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
@@ -195,7 +195,7 @@ const UpdateProduct = () => {
             const formData = new FormData();
                         formData.append('file', file);
             
-                        const uploadResponse = await fetch(`https://ecommerce-1mc7.onrender.com/upload/${imageA}`, {
+                        const uploadResponse = await fetch(`https://e-commerce-api-peach.vercel.app/upload/${imageA}`, {
                             method: 'PUT',
                             headers: {
                                 Accept: 'application/json',
@@ -207,7 +207,7 @@ const UpdateProduct = () => {
             
                         const token = JSON.parse(localStorage.getItem('tk'));
             
-                        const updateResponse = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
+                        const updateResponse = await fetch(`https://e-commerce-api-peach.vercel.app/product/${id}`, {
                             method: 'PUT',
                             body: JSON.stringify({ name, price, category, companyname, imageA: newImageA }),
                             headers: {
@@ -282,7 +282,7 @@ const UpdateProduct = () => {
                         onChange={(e) => setFile(e.target.files[0])}
                         required // Required field
                     />
-                    {imageA && <img src={`https://ecommerce-1mc7.onrender.com/images/${imageA}`} alt="Product" className="img-thumbnail mt-2" style={{ width: '100px' }} />}
+                    {imageA && <img src={`https://e-commerce-api-peach.vercel.app/images/${imageA}`} alt="Product" className="img-thumbnail mt-2" style={{ width: '100px' }} />}
                     <Form.Control.Feedback type="invalid">Please provide an image.</Form.Control.Feedback>
                 </Form.Group>
                 <Button type="submit">Update Product</Button>

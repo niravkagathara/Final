@@ -85,7 +85,7 @@ function Cart() {
                       <tr>
                         <td style={{ height: '2rem', width: '30rem' }}>
                           <div className="cart-info">
-                            <img src={`https://ecommerce-1mc7.onrender.com/images/${cartItem.imageA}`} alt={cartItem.name} />
+                            <img src={`https://e-commerce-api-peach.vercel.app/images/${cartItem.imageA}`} alt={cartItem.name} />
                             <div>
                               <p>{cartItem.name}</p>
                               <p>{cartItem.companyname}</p>

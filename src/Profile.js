@@ -14,7 +14,7 @@ const Profile = () => {
     const getProducts = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/${ii}`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/${ii}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ const Profile = () => {
                 <Card.Body>
                     {auth ? (
                         <>
-                            <Card.Img variant="top" src={`https://ecommerce-1mc7.onrender.com/images/${auth.photo}`} style={{ width: '100px' }} />
+                            <Card.Img variant="top" src={`https://e-commerce-api-peach.vercel.app/images/${auth.photo}`} style={{ width: '100px' }} />
                             <Card.Title>{`Username: ${auth.name}`}</Card.Title>
                             <Card.Text>{`Email: ${auth.email}`}</Card.Text>
                             <Button variant="secondary" onClick={logout}>Logout</Button>

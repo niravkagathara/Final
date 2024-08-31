@@ -26,7 +26,7 @@ function Orderadd() {
         const id = JSON.parse(localStorage.getItem('user')).user._id;
         userId = id;
 
-        let result = await fetch(`https://ecommerce-1mc7.onrender.com/addorder`, {
+        let result = await fetch(`https://e-commerce-api-peach.vercel.app/addorder`, {
             method: "POST",
             body: JSON.stringify({ costumerName, address, email, phoneNumber, totalAmount, userId }),
             headers: {
@@ -80,7 +80,7 @@ function Orderadd() {
       }
   
       // Make API call to process payment
-      let result = await fetch(`https://ecommerce-1mc7.onrender.com/makepayment`, {
+      let result = await fetch(`https://e-commerce-api-peach.vercel.app/makepayment`, {
         method: "POST",
         body: JSON.stringify({ paymentMethod, cardNumber, cardType, upiNumber, pri }),
         headers: {

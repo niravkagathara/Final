@@ -19,7 +19,7 @@ function Signup() {
       setError(true);
       return false
     }
-    let result = await fetch(`https://ecommerce-1mc7.onrender.com/register`, {
+    let result = await fetch(`https://e-commerce-api-peach.vercel.app/register`, {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
       headers: {

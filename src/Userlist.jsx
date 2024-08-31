@@ -34,7 +34,7 @@ const User1 = () => {
     const getUsers = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const User1 = () => {
     const deleteUser = async (id) => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/${id}`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -105,7 +105,7 @@ const User1 = () => {
                             <tr key={user._id}>
                                 <td onClick={() => handleShowEditModal(user)} >{index + 1}</td>
                                 <td onClick={() => handleShowEditModal(user)} style={{ height: '6rem', width: '20rem' }}>
-                                    <img src={`https://ecommerce-1mc7.onrender.com/images/${user.photo}`} alt={user.name} style={{ width: '100px' }} />
+                                    <img src={`https://e-commerce-api-peach.vercel.app/images/${user.photo}`} alt={user.name} style={{ width: '100px' }} />
                                 </td>
                                 <td onClick={() => handleShowEditModal(user)} style={{ width: '15rem' }}>{user.name}</td>
                                 <td onClick={() => handleShowEditModal(user)} style={{ width: '9rem' }}>{user.role}</td>

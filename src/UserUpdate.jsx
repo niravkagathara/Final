@@ -23,7 +23,7 @@ const Userupdate = () => {
     const getProductDetails = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            let result = await fetch(`https://ecommerce-1mc7.onrender.com/${id}`, {
+            let result = await fetch(`https://e-commerce-api-peach.vercel.app/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
@@ -56,7 +56,7 @@ const Userupdate = () => {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const uploadResponse = await fetch(`https://ecommerce-1mc7.onrender.com/upload/${imageA}`, {
+            const uploadResponse = await fetch(`https://e-commerce-api-peach.vercel.app/upload/${imageA}`, {
                 method: 'PUT',
                 headers: {
                     Accept: 'application/json',
@@ -72,7 +72,7 @@ const Userupdate = () => {
 
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            let result = await fetch(`https://ecommerce-1mc7.onrender.com/${id}`, {
+            let result = await fetch(`https://e-commerce-api-peach.vercel.app/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ name, email, password, role, photo: photoUrl }),
                 headers: {
@@ -165,7 +165,7 @@ const Userupdate = () => {
                         required
                     />
                     <Form.Control.Feedback type="invalid">Please upload an image.</Form.Control.Feedback>
-                    {photo && <img src={`https://ecommerce-1mc7.onrender.com/images/${photo}`} alt="Profile" style={{ width: '100px', marginTop: '10px' }} />}
+                    {photo && <img src={`https://e-commerce-api-peach.vercel.app/images/${photo}`} alt="Profile" style={{ width: '100px', marginTop: '10px' }} />}
                 </Form.Group>
 
                 <Button variant="primary" type="submit" className="mt-3">Update User</Button>

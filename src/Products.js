@@ -14,7 +14,7 @@ function Products() {
 
   }, []);
   const getProducts = async () => {
-    let result = await fetch(`https://ecommerce-1mc7.onrender.com/product/get`,
+    let result = await fetch(`https://e-commerce-api-peach.vercel.app/product/get`,
 
     );
     result = await result.json();
@@ -51,7 +51,7 @@ function Products() {
                   <div className=" product-item" key={e._id}>
                     <div className="overlay">
                       <a href={`/detail/${e._id}`} className="product-thumb">
-                        <img className="card-img-top" src={`https://ecommerce-1mc7.onrender.com/images/${e.imageA}`} alt="Card image cap" />
+                        <img className="card-img-top" src={`https://e-commerce-api-peach.vercel.app/images/${e.imageA}`} alt="Card image cap" />
                       </a>
                       {/* <span className="discount">40%</span> */}
 

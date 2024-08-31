@@ -33,7 +33,7 @@ function ProductDetail() {
 
   const getProductDetails = async () => {
 
-      let result = await fetch(`https://ecommerce-1mc7.onrender.com/product/all/${par.id}`,
+      let result = await fetch(`https://e-commerce-api-peach.vercel.app/product/all/${par.id}`,
           {
               headers: {
                   "Content-Type": "application/json",
@@ -58,7 +58,7 @@ function ProductDetail() {
   }, []);
 
   const getProducts = async () => {
-    let result = await fetch(`https://ecommerce-1mc7.onrender.com/product/get`,
+    let result = await fetch(`https://e-commerce-api-peach.vercel.app/product/get`,
 
     );
     result = await result.json();
@@ -75,7 +75,7 @@ function ProductDetail() {
     <div className="details container">
       <div className="left image-container">
         <div className="main">
-          <img src={`https://ecommerce-1mc7.onrender.com/images/${imageA}`} alt="Card image cap"id="zoom"  />
+          <img src={`https://e-commerce-api-peach.vercel.app/images/${imageA}`} alt="Card image cap"id="zoom"  />
         </div>
       </div>
       <div className="right">
@@ -119,7 +119,7 @@ function ProductDetail() {
                   <div className=" product-item" key={e._id}>
                     <div className="overlay">
                       <a href={`/detail/${e._id}`} className="product-thumb">
-                        <img className="card-img-top" src={`https://ecommerce-1mc7.onrender.com/images/${e.imageA}`} alt="Card image cap" />
+                        <img className="card-img-top" src={`https://e-commerce-api-peach.vercel.app/images/${e.imageA}`} alt="Card image cap" />
                       </a>
                       {/* <span className="discount">40%</span> */}
 

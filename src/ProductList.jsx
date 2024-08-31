@@ -27,7 +27,7 @@ const ProductList = () => {
 
     const getProducts = async () => {
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/get`);
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/product/get`);
             if (!response.ok) {
                 throw new Error("Failed to fetch products");
             }
@@ -42,7 +42,7 @@ const ProductList = () => {
         const token = JSON.parse(localStorage.getItem('tk'));
 
         try {
-            const response = await fetch(`https://ecommerce-1mc7.onrender.com/product/${id}`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/product/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -91,7 +91,7 @@ const ProductList = () => {
                                 <tr key={product._id}>
                                     <td onClick={() => handleShowEditModal(product)}>{index + 1}</td>
                                     <td onClick={() => handleShowEditModal(product)} style={{ height: '15rem', width: '20rem' }}>
-                                        <img src={`https://ecommerce-1mc7.onrender.com/images/${product.imageA}`} alt={product.name} style={{ width: '100px' }} />
+                                        <img src={`https://e-commerce-api-peach.vercel.app/images/${product.imageA}`} alt={product.name} style={{ width: '100px' }} />
                                     </td>
                                     <td onClick={() => handleShowEditModal(product)} style={{ height: '6rem', width: '18rem' }}>{product.name}</td>
                                     <td onClick={() => handleShowEditModal(product)} style={{ height: '6rem', width: '15rem' }}>${product.price}</td>

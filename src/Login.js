@@ -23,7 +23,7 @@ const Login = () => {
       setError(true);
       return false
   }
-    let result = await fetch(`https://ecommerce-1mc7.onrender.com/login`, {
+    let result = await fetch(`https://e-commerce-api-peach.vercel.app/login`, {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {

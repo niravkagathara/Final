@@ -27,7 +27,7 @@ const AddProduct = () => {
         formData.append('file', file);
 
         let responseData;
-        await fetch(`https://ecommerce-1mc7.onrender.com/upload`, {
+        await fetch(`https://e-commerce-api-peach.vercel.app/upload`, {
             method: 'POST',
             headers: { Accept: 'application/json' },
             body: formData,
@@ -39,7 +39,7 @@ const AddProduct = () => {
         const userId = JSON.parse(localStorage.getItem('user')).user._id;
         const imageA = responseData.image_url;
 
-        const result = await fetch(`https://ecommerce-1mc7.onrender.com/product/add-product`, {
+        const result = await fetch(`https://e-commerce-api-peach.vercel.app/product/add-product`, {
             method: "POST",
             body: JSON.stringify({ name, price, category, companyname, userId, imageA }),
             headers: {
