@@ -34,7 +34,7 @@ const User1 = () => {
     const getUsers = async () => {
         const token = JSON.parse(localStorage.getItem('tk'));
         try {
-            const response = await fetch(`https://e-commerce-api-peach.vercel.app/users`, {
+            const response = await fetch(`https://e-commerce-api-peach.vercel.app/`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
